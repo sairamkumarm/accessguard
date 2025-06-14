@@ -1,1 +1,14 @@
-spring.application.name=cloud-config-server
+spring:
+  application:
+    name: cloud-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${CONFIG_REPO_URL}
+          default-label: main
+          clone-on-start: true
+          username: ${CONFIG_USERNAME}
+          password: ${CONFIG_PASSWORD}
+server:
+  port: 8888

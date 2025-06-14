@@ -1,1 +1,1 @@
-spring.application.name=usage-service
+spring.application.name: usage-service
