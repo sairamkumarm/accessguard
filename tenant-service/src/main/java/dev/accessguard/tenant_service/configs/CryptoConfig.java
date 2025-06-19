@@ -11,7 +11,7 @@ import java.util.Base64;
 @Configuration
 public class CryptoConfig {
 
-    @Value("${AWS_MASTER_KEY}")
+    @Value("${AES_MASTER_KEY}")
     private String base64Key;
 
     @Bean

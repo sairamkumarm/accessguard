@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>service-registry</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>service-registry</name>
 	<description>Service Registry for Accessguard</description>
 	<url/>

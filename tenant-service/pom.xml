@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>tenant-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>tenant-service</name>
 	<description>Tenant Service for Accessguard.</description>
 	<url/>
@@ -58,6 +57,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.accessguard</groupId>
+			<artifactId>commons</artifactId>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>

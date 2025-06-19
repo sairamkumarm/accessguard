@@ -5,7 +5,7 @@
     <groupId>dev.accessguard</groupId>
     <artifactId>accessguard</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>tester</name>
+    <name>accessguard</name>
     <description>Parent project for accessguard services</description>
     <packaging>pom</packaging>
     <parent>
@@ -33,6 +33,7 @@
     <modules>
         <module>auth-service</module>
         <module>cloud-config-server</module>
+        <module>commons</module>
         <module>gateway</module>
         <module>key-service</module>
         <module>notification-service</module>
@@ -49,16 +50,21 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
-            <groupId>dev.accessguard</groupId>
-            <artifactId>commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
         </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
-
+            <dependency>
+                <groupId>dev.accessguard</groupId>
+                <artifactId>commons</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

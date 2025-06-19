@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>key-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>key-service</name>
 	<description>Key Service for Accessguard.</description>
 	<url/>

@@ -1,7 +1,8 @@
 package dev.accessguard.tenant_service.services;
 
 import crypto.Encryption;
-import org.bouncycastle.jcajce.provider.asymmetric.RSA;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -13,6 +14,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class RSAKeyGenerator {
 
     private final SecretKey masterKey;

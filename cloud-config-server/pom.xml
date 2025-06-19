@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>cloud-config-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>cloud-config-server</name>
 	<description>Cloud Config Server for Accessguard</description>
 	<url/>

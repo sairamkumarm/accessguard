@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>gateway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>gateway</name>
 	<description>API gateway for Accessguard</description>
 	<url/>

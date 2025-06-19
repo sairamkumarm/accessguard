@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>trusted-ip-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>trusted-ip-service</name>
 	<description>Trusted IP Service for Accessguard.</description>
 	<url/>

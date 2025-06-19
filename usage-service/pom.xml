@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>usage-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>usage-service</name>
 	<description>Usage Service for Accessguard.</description>
 	<url/>

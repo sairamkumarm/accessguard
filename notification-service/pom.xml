@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>notification-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>notification-service</name>
 	<description>Notification Service for Accessguard.</description>
 	<url/>
