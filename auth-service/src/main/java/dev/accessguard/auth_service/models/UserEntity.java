@@ -51,4 +51,12 @@ public class UserEntity {
 
     public UserEntity(){}
 
+    public Set<String> rolesToStringSet(){
+        Set<String> res = new HashSet<>();
+        for(RoleEntity role: userRoles){
+            res.add(role.getRoleName());
+        }
+        return res;
+    }
+
 }
