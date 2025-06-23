@@ -1,19 +1,22 @@
 package dev.accessguard.auth_service.services;
 
+import annotations.TrackUsage;
 import dev.accessguard.auth_service.Repositories.RoleRepository;
 import dev.accessguard.auth_service.Repositories.TenantRepository;
 import dev.accessguard.auth_service.Repositories.UserRepository;
 import dev.accessguard.auth_service.models.*;
+import models.UsageEvent;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+
 
     private final UserRepository userRepository;
     private final TenantRepository tenantRepository;
@@ -21,7 +24,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
 
-    public UserService(UserRepository userRepository, TenantRepository tenantRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JWTService jwtService) {
+    public UserService( UserRepository userRepository, TenantRepository tenantRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JWTService jwtService) {
+
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.tenantRepository = tenantRepository;
@@ -29,6 +33,7 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
+    @TrackUsage(eventType = "USER_REGISTERED")
     public UserResponseDTO registerUser(UserCreationDTO userCreationDTO, String tenantName){
         UserEntity user = new UserEntity();
         user.setUserName(userCreationDTO.getUserName());
@@ -37,7 +42,7 @@ public class UserService {
         user.setUserPhone(userCreationDTO.getUserPhone());
         Set<RoleEntity> roleEntitySet = new HashSet<>();
         for(String role: userCreationDTO.getUserRoles()){
-            Optional<RoleEntity> roleEntity = roleRepository.findByRoleName(role);
+            Optional<RoleEntity> roleEntity = roleRepository.findByRoleNameAndTenantEntity_TenantName(role,tenantName);
             if (roleEntity.isPresent()) {
                 roleEntitySet.add(roleEntity.get());
                 continue;
@@ -51,8 +56,9 @@ public class UserService {
         return userEntityToResponseDTO(user);
     }
 
+    @TrackUsage(eventType = "USER_QUERIED")
     public UserResponseDTO getUserByUsernameAndTenant(String tenantName, String userName) {
-        UserEntity user = userRepository.findByUserName(userName)
+        UserEntity user = userRepository.findByUserNameAndTenantEntity_TenantName(userName,tenantName)
                 .orElseThrow(() -> new RuntimeException("User not found: " + userName));
 
         if (!user.getTenantEntity().getTenantName().equals(tenantName)) {
@@ -62,8 +68,9 @@ public class UserService {
         return userEntityToResponseDTO(user);
     }
 
+    @TrackUsage(eventType = "USER_UPDATED")
     public UserResponseDTO updateUser(String tenantName, UserUpdateDTO updateDTO) {
-        UserEntity user = userRepository.findByUserName(updateDTO.getUserName())
+        UserEntity user = userRepository.findByUserNameAndTenantEntity_TenantName(updateDTO.getUserName(),tenantName)
                 .orElseThrow(() -> new RuntimeException("User not found: " + updateDTO.getUserName()));
 
         if (!user.getTenantEntity().getTenantName().equals(tenantName)) {
@@ -91,9 +98,10 @@ public class UserService {
         return userEntityToResponseDTO(user);
     }
 
+    @TrackUsage(eventType = "USER_DELETED")
     public void deleteUser(String tenantName, String userName) {
 
-        UserEntity user = userRepository.findByUserName(userName)
+        UserEntity user = userRepository.findByUserNameAndTenantEntity_TenantName(userName,tenantName)
                 .orElseThrow(() -> new RuntimeException("User not found: " + userName));
 
         if (!user.getTenantEntity().getTenantName().equals(tenantName)) {
@@ -103,9 +111,9 @@ public class UserService {
         userRepository.delete(user);
     }
 
-
-    public String loginUser(String tenantName, UserLoginDTO userLoginDTO){
-        UserEntity user = userRepository.findByUserName(userLoginDTO.getUserName())
+    @TrackUsage(eventType = "USER_LOGIN")
+    public Map<String, Object> loginUser(String tenantName, UserLoginDTO userLoginDTO){
+        UserEntity user = userRepository.findByUserNameAndTenantEntity_TenantName(userLoginDTO.getUserName(),tenantName)
                 .orElseThrow(() -> new RuntimeException("User not found: " + userLoginDTO.getUserName()));
 
         if (!user.getTenantEntity().getTenantName().equals(tenantName)) {
@@ -115,7 +123,11 @@ public class UserService {
             throw new RuntimeException("Invalid Credentials");
         }
         Long exp = (long) (60 * 60 * 6);
-        return jwtService.generateJWT(userLoginDTO.getUserName(),user.rolesToStringSet(),tenantName,exp);
+        String jwt = jwtService.generateJWT(userLoginDTO.getUserName(),user.rolesToStringSet(),tenantName,exp);
+        Map<String, Object> res = new HashMap<>();
+        res.put("username",userLoginDTO.getUserName());
+        res.put("jwt",jwt);
+        return res;
     }
 
     private UserResponseDTO userEntityToResponseDTO(UserEntity user) {

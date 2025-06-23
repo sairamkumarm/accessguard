@@ -1,5 +1,6 @@
 package dev.accessguard.tenant_service.services;
 
+import annotations.TrackUsage;
 import dev.accessguard.tenant_service.Repositories.TenantRepository;
 import dev.accessguard.tenant_service.models.TenantCreatedDTO;
 import dev.accessguard.tenant_service.models.TenantNameDTO;
@@ -35,6 +36,7 @@ public class TenantService {
         return tenantRepository.findByTenantName(tenantName).isPresent();
     }
 
+    @TrackUsage(eventType = "TENANT-REGISTERED")
     public TenantCreatedDTO createTenant(String tenantName){
 //        System.out.println(tenantName);
 
@@ -67,12 +69,11 @@ public class TenantService {
             throw new RuntimeException(e);
         }
     }
-
+    @TrackUsage(eventType = "TENANT-QUERIED")
     public Optional<TenantResponseDTO> getTenant(String tenantName) {
         Optional<TenantEntity> tenant = tenantRepository.findByTenantName(tenantName);
         return tenant.map(this::tenantEntityToTenantDTO);
     }
-
 
     private TenantResponseDTO tenantEntityToTenantDTO(TenantEntity tenant) {
         TenantResponseDTO res = new TenantResponseDTO();
@@ -81,6 +82,7 @@ public class TenantService {
         return res;
     }
 
+    @TrackUsage(eventType = "TENANT-DELETED")
     @Transactional
     public String deleteTenant(String tenantName) {
         try {
@@ -91,6 +93,7 @@ public class TenantService {
         }
     }
 
+    @TrackUsage(eventType = "TENANT-API-KEY-ROTATED")
     public Optional<TenantCreatedDTO> recreateAPIKey(String tenantName) {
         Optional<TenantEntity> tenant = tenantRepository.findByTenantName(tenantName);
         TenantCreatedDTO tenantCreatedDTO = new TenantCreatedDTO();

@@ -48,7 +48,14 @@ public class JWTService {
             PrivateKey privateKey = parseRSAPrivateKeyFromPem(pem);
             Map<String, Object> roles = new HashMap<>();
             roles.put("roles",userRoles);
-            return Jwts.builder().setSubject(userName).addClaims(roles).setIssuer(tenantName).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + Expiration)).signWith(privateKey,SignatureAlgorithm.RS256).compact();
+            return Jwts.builder()
+                    .setSubject(userName)
+                    .addClaims(roles)
+                    .setIssuer(tenantName)
+                    .setIssuedAt(new Date())
+                    .setHeaderParam("kid",tenantName+"-key")
+                    .setExpiration(new Date(System.currentTimeMillis() + Expiration))
+                    .signWith(privateKey,SignatureAlgorithm.RS256).compact();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

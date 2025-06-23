@@ -106,3 +106,9 @@ gen
 **/logs/
 **/out/
 
+**/certificates/
+*.pem
+*.truststore.jks
+*.jks
+client.trustsore.jks
+ca.pem

@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import logging.TenantContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,6 +53,7 @@ public class APIKeyFilter extends OncePerRequestFilter {
             response.getWriter().write("Missing tenantName or API Key");
             return;
         }
+        TenantContext.setTenant(tenantName);
         if(apiCheckService.checkAPIKeyExistence(tenantName,rawAPIKey)){
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(tenantName,null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_TENANT")));
             SecurityContextHolder.getContext().setAuthentication(token);

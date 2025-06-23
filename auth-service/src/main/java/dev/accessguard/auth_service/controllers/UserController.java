@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/v1/")
 public class UserController {
@@ -70,7 +73,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestHeader("X-TENANT-NAME") String tenantName, @RequestBody UserLoginDTO userLoginDTO){
         try {
-            String res = userService.loginUser(tenantName, userLoginDTO);
+            Map<String, Object> res = userService.loginUser(tenantName, userLoginDTO);
             return ResponseEntity.ok(res);
         } catch (Exception e){
             if (e.getMessage().startsWith("Invalid Credentials")){

@@ -1,1 +1,33 @@
-spring.application.name: usage-service
+spring:
+  application:
+    name: usage-service
+  config.import: optional:configserver:http://localhost:8888/
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  kafka:
+    bootstrap-servers: kafka-371e4f51-simplelogin-5038.f.aivencloud.com:12337
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-256
+      sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="${AVN_USERNAME}" password="${AVN_PASSWORD}";
+      ssl.endpoint.identification.algorithm: ""
+      ssl.truststore.type: jks
+      ssl.truststore.location: ${TRUSTSTORE_LOCATION}
+      ssl.truststore.password: ${TRUSTSTORE_PASSWORD}
+      session.timeout.ms: 45000
+    producer: #only for producers
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer: #only for consumers
+      group-id: usage-consumer-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'  # For JSON deserialization
+    listener:
+      ack-mode: manual
+
+server:
+  port: 9020

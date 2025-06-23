@@ -29,6 +29,12 @@ spring:
               - Path=/role/**
               filters:
               - RewritePath=/role/(?<segment>.*), /${segment}
+            - id: key-route
+              uri: lb://KEY-SERVICE
+              predicates:
+                - Path=/keys/**
+              filters:
+                - RewritePath=/keys/(?<segment>.*), /${segment}
           # filters:
           #   - Auther
 #        - id: auth-route

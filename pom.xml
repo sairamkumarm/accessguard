@@ -40,7 +40,6 @@
         <module>role-service</module>
         <module>service-registry</module>
         <module>tenant-service</module>
-        <module>trusted-ip-service</module>
         <module>usage-service</module>
     </modules>
 

@@ -67,6 +67,10 @@
 			<groupId>dev.accessguard</groupId>
 			<artifactId>commons</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
